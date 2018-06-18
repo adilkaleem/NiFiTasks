@@ -1,0 +1,30 @@
+#!/usr/bin/bash
+
+F=/path/to/log/directory/logFile.log
+date > $F
+echo hadoop "$@" >> $F
+echo "" >>$F
+CNT=0
+for AR in "$@"
+do
+  CNT=$((CNT+1))
+  #echo $CNT: "\'$AR\'" >> $F
+  echo $CNT: "'$AR'" >> $F
+done
+
+SCRIPTNAME=`basename $0`
+
+case $SCRIPTNAME in
+  hadoop)
+      echo hadoop >>$F
+      hadoop "$@" >>$F 2>&1
+    ;;
+  hadoop-debug)
+      echo hadoop debug >>$F
+    ;;
+
+  *)
+    echo unexpected script name $SCRIPTNAME >> $F
+    ;;
+esac
+cat $F
